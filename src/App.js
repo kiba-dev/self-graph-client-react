@@ -13,6 +13,8 @@ function App() {
   const [sayHelloMessage, setSayHelloMessage] = useState('')
   const [students, setStudents] = useState([])
   const [userName, setUserName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
 
   const loadStudents = async () => {
     const query = gql`
@@ -69,6 +71,26 @@ function App() {
     loadSayHello(userName).then(message => {
       setSayHelloMessage(message)
     })
+  }
+
+  const updateEmail = (evt) => {
+    setEmail(evt.target.value)
+  }
+
+  const updatePassword = (evt) => {
+    setPassword(evt.target.value)
+  }
+
+  const handleLogin = async () => {
+    const response = await fetch('http://localhost:9000/login', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    })
+
+    const res = await response.json()
+
+    console.log(res)
   }
 
   return (
@@ -129,6 +151,17 @@ function App() {
         <div id="SayhelloDiv">
           <h1>{sayHelloMessage}</h1>
         </div>
+      </section>
+
+      <hr />
+
+      <section>
+        <h1>Login first to access greeting</h1>
+        <input id="email" type="text" onChange={updateEmail} value={email} />
+        <br />
+        <input id="password" type="password" onChange={updatePassword} value={password} />
+        <br />
+        <button id="btnLogin" onClick={handleLogin}>Login</button>
       </section>
     </div>
   );
